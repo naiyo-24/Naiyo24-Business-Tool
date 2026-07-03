@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../models/business_profile_model.dart';
+import '../../../notifiers/business_profile_notifier.dart';
 import '../../../theme/theme.dart';
 import '../../../widgets/custom_text_field.dart';
 import '../../../widgets/custom_button.dart';
 
-class StepOneForm extends StatefulWidget {
+class StepOneForm extends ConsumerStatefulWidget {
   final VoidCallback onContinue;
 
   const StepOneForm({super.key, required this.onContinue});
 
   @override
-  State<StepOneForm> createState() => _StepOneFormState();
+  ConsumerState<StepOneForm> createState() => _StepOneFormState();
 }
 
-class _StepOneFormState extends State<StepOneForm> {
+class _StepOneFormState extends ConsumerState<StepOneForm> {
   final _formKey = GlobalKey<FormState>();
   final _businessNameController = TextEditingController();
   final _brandNameController = TextEditingController();
@@ -70,6 +73,16 @@ class _StepOneFormState extends State<StepOneForm> {
 
   void _handleContinue() {
     if (_formKey.currentState!.validate()) {
+      final profile = BusinessProfileModel(
+        businessName: _businessNameController.text.trim(),
+        brandName: _showBrandName ? _brandNameController.text.trim() : '',
+        website: _websiteController.text.trim(),
+        phone: '$_selectedPhoneCode ${_phoneController.text.trim()}',
+        country: _selectedCountry,
+        currency: _selectedCurrency,
+        gstNumber: _hasGst ? _gstController.text.trim() : '',
+      );
+      ref.read(businessProfileNotifierProvider.notifier).saveProfile(profile);
       widget.onContinue();
     }
   }

@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../routes/app_routes.dart';
 import '../../theme/theme.dart';
 import '../../notifiers/auth_notifier.dart';
+import '../../notifiers/business_profile_notifier.dart';
+import '../../models/business_profile_model.dart';
 import '../../widgets/dashboard_app_bar.dart';
 import '../../widgets/side_navigation.dart';
 import '../../widgets/custom_text_field.dart';
@@ -44,15 +46,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   void initState() {
     super.initState();
     final authState = ref.read(authNotifierProvider);
+    final businessProfile = ref.read(businessProfileNotifierProvider);
+    
     _nameController = TextEditingController(text: 'Demo User');
     _emailController = TextEditingController(text: authState.userEmail ?? '');
-    _phoneController = TextEditingController(text: '+91 98765 43210');
+    _phoneController = TextEditingController(text: businessProfile.phone);
 
-    _companyController = TextEditingController(text: 'Acme Corp');
-    _addressController = TextEditingController(text: '123 Business Park, Sector 62, Noida');
-    _websiteController = TextEditingController(text: 'https://acme.corp');
+    _companyController = TextEditingController(text: businessProfile.businessName);
+    _addressController = TextEditingController(text: businessProfile.address);
+    _websiteController = TextEditingController(text: businessProfile.website);
 
-    _taxIdController = TextEditingController(text: '09AAAAA1111A1Z1');
+    _taxIdController = TextEditingController(text: businessProfile.gstNumber);
     _taxRateController = TextEditingController(text: '18%');
   }
 
@@ -299,6 +303,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             child: CustomButton(
               label: 'Save Changes',
               onPressed: () {
+                final currentProfile = ref.read(businessProfileNotifierProvider);
+                final updatedProfile = currentProfile.copyWith(
+                  phone: _phoneController.text.trim(),
+                );
+                ref.read(businessProfileNotifierProvider.notifier).saveProfile(updatedProfile);
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Profile updated successfully!')),
                 );
@@ -347,6 +356,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             child: CustomButton(
               label: 'Save Details',
               onPressed: () {
+                final currentProfile = ref.read(businessProfileNotifierProvider);
+                final updatedProfile = currentProfile.copyWith(
+                  businessName: _companyController.text.trim(),
+                  address: _addressController.text.trim(),
+                  website: _websiteController.text.trim(),
+                );
+                ref.read(businessProfileNotifierProvider.notifier).saveProfile(updatedProfile);
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Business details updated successfully!')),
                 );
@@ -385,6 +401,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           child: CustomButton(
             label: 'Save Tax Settings',
             onPressed: () {
+                final currentProfile = ref.read(businessProfileNotifierProvider);
+                final updatedProfile = currentProfile.copyWith(
+                  gstNumber: _taxIdController.text.trim(),
+                );
+                ref.read(businessProfileNotifierProvider.notifier).saveProfile(updatedProfile);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Tax settings updated successfully!')),
               );

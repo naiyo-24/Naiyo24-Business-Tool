@@ -5,8 +5,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../providers/auth_provider.dart';
 import '../screens/splash/splash_screen.dart';
-import '../screens/login/login_screen.dart';
-import '../screens/signup/signup_screen.dart';
 import '../screens/onboarding/onboarding_screen.dart' deferred as onboarding_screen;
 import '../screens/dashboard/dashboard_screen.dart' deferred as dashboard;
 import '../screens/settings/settings_screen.dart' deferred as settings;
@@ -99,26 +97,25 @@ GoRouter appRouter(Ref ref) {
 
     // ── Global Redirect ────────────────────────────────────────────────────────
     redirect: (BuildContext context, GoRouterState state) {
-      final isLoggedIn = authState.isLoggedIn;
       final hasCompletedOnboarding = authState.hasCompletedOnboarding;
       final location = state.matchedLocation;
 
-      // 1. Not logged in → trying to access a protected route
-      if (AppRoutes.isProtected(location) && !isLoggedIn) {
-        return AppRoutes.login;
+      // Rule 1: Always allow Splash Screen and Dashboard (so they can see the buttons)
+      if (location == AppRoutes.splash || location == AppRoutes.dashboard) {
+        return null;
       }
 
-      // 2. Logged in but HAS NOT completed onboarding → FORCE to /onboarding
-      if (isLoggedIn && !hasCompletedOnboarding && location != AppRoutes.onboarding) {
+      // Rule 2: If trying to access anything else and HAS NOT completed onboarding, intercept!
+      if (!hasCompletedOnboarding && location != AppRoutes.onboarding) {
         return AppRoutes.onboarding;
       }
 
-      // 3. Logged in and HAS completed onboarding → trying to access /onboarding
-      if (isLoggedIn && hasCompletedOnboarding && location == AppRoutes.onboarding) {
+      // Rule 3: If HAS completed onboarding and trying to access onboarding, send to dashboard
+      if (hasCompletedOnboarding && location == AppRoutes.onboarding) {
         return AppRoutes.dashboard;
       }
 
-      return null; // No redirect needed
+      return null;
     },
 
     // ── Routes ────────────────────────────────────────────────────────────────
@@ -129,24 +126,6 @@ GoRouter appRouter(Ref ref) {
         name: 'splash',
         pageBuilder: (context, state) => const NoTransitionPage(
           child: SplashScreen(),
-        ),
-      ),
-
-      // ── Auth ─────────────────────────────────────────────────────────────────
-      GoRoute(
-        path: AppRoutes.login,
-        name: 'login',
-        pageBuilder: (context, state) => const NoTransitionPage(
-          child: LoginScreen(),
-        ),
-      ),
-      GoRoute(
-        path: AppRoutes.signup,
-        name: 'signup',
-        pageBuilder: (context, state) => CustomTransitionPage(
-          key: state.pageKey,
-          child: const SignupScreen(),
-          transitionsBuilder: _fadeTransition,
         ),
       ),
       GoRoute(

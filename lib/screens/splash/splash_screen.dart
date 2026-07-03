@@ -47,8 +47,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   void _navigate() {
     if (!mounted) return;
-    final isLoggedIn = ref.read(authProvider).isLoggedIn;
-    context.go(isLoggedIn ? AppRoutes.dashboard : AppRoutes.login);
+    context.go(AppRoutes.dashboard);
   }
 
   @override
