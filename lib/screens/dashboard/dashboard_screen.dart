@@ -259,7 +259,6 @@ class _StatsGrid extends StatelessWidget {
             return Container(
               width: cardWidth,
               constraints: const BoxConstraints(
-                minWidth: 200,
                 minHeight: 120,
               ),
               child: StatCard(

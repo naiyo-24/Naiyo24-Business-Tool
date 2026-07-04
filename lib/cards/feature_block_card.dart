@@ -94,18 +94,16 @@ class _FeatureBlockCardState extends State<FeatureBlockCard> {
               const SizedBox(height: AppSpacing.sm),
 
               // ── Description ───────────────────────────────────────────────────
-              Expanded(
-                child: Text(
-                  widget.description,
-                  style: GoogleFonts.inter(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.textSecondary,
-                    height: 1.55,
-                  ),
-                  maxLines: 4,
-                  overflow: TextOverflow.ellipsis,
+              Text(
+                widget.description,
+                style: GoogleFonts.inter(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.textSecondary,
+                  height: 1.55,
                 ),
+                maxLines: 4,
+                overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: AppSpacing.lg),
 
@@ -115,6 +113,7 @@ class _FeatureBlockCardState extends State<FeatureBlockCard> {
                 child: OutlinedButton(
                   onPressed: widget.onAction,
                   style: ButtonStyle(
+                    minimumSize: WidgetStateProperty.all(const Size(0, 44)),
                     padding: WidgetStateProperty.all(
                       const EdgeInsets.symmetric(
                         vertical: AppSpacing.md,
