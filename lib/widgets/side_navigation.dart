@@ -573,7 +573,7 @@ class _NavTileState extends State<_NavTile> {
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(AppBorderRadius.md),
-          border: widget.selected
+          border: (widget.selected && !_isHovered)
               ? Border(left: BorderSide(color: activeColor, width: 4))
               : null,
         ),

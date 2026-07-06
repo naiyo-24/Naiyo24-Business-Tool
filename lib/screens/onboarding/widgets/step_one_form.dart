@@ -269,7 +269,7 @@ class _StepOneFormState extends ConsumerState<StepOneForm> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildLabel('7. Have GST Number?'),
+                    _buildLabel(_hasGst ? '7. Have GST Number?*' : '7. Have GST Number?'),
                     Text(
                       'Add your GSTIN to unlock smart AI and GST workflows.',
                       style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary),
@@ -289,19 +289,14 @@ class _StepOneFormState extends ConsumerState<StepOneForm> {
             CustomTextField(
               controller: _gstController,
               hintText: 'Enter Your GST Number',
+              validator: (v) => v == null || v.isEmpty ? 'GST number is required' : null,
             ),
           ],
 
           const SizedBox(height: AppSpacing.lg),
 
           // 8. Use Case
-          Text(
-            'What do you want to use Naiyo Business Tool for?',
-            style: AppTextStyles.labelLarge.copyWith(
-              fontWeight: FontWeight.w600,
-              color: AppColors.textPrimary,
-            ),
-          ),
+          _buildLabel('8. What do you want to use Naiyo Business Tool for?'),
           const SizedBox(height: AppSpacing.sm),
           DropdownButtonFormField<String>(
             value: _selectedUseCase,
@@ -348,13 +343,7 @@ class _StepOneFormState extends ConsumerState<StepOneForm> {
           const SizedBox(height: AppSpacing.lg),
 
           // 9. Business Type
-          Text(
-            'What best describes your business?',
-            style: AppTextStyles.labelLarge.copyWith(
-              fontWeight: FontWeight.w600,
-              color: AppColors.textPrimary,
-            ),
-          ),
+          _buildLabel('9. What best describes your business?'),
           const SizedBox(height: AppSpacing.sm),
           DropdownButtonFormField<String>(
             value: _selectedBusinessType,
