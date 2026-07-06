@@ -127,13 +127,16 @@ class _InvoicesScreenState extends ConsumerState<InvoicesScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // ── Page header ─────────────────────────────────────────────
-                  Wrap(
-                    alignment: WrapAlignment.spaceBetween,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: AppSpacing.md,
-                    runSpacing: AppSpacing.md,
-                    children: [
-                      Row(
+                  // NOTE: Do NOT use Wrap here — Wrap passes infinite width to
+                  // its children which crashes OutlinedButton text layout.
+                  // LayoutBuilder receives the actual bounded width from the
+                  // Expanded+SingleChildScrollView ancestor above.
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final isWide = constraints.maxWidth >= 600;
+
+                      // Shared widgets ──────────────────────────────────────────
+                      final titleRow = Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           InkWell(
@@ -164,8 +167,9 @@ class _InvoicesScreenState extends ConsumerState<InvoicesScreen> {
                             ),
                           ),
                         ],
-                      ),
-                      Row(
+                      );
+
+                      final actionButtons = Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           OutlinedButton.icon(
@@ -207,8 +211,30 @@ class _InvoicesScreenState extends ConsumerState<InvoicesScreen> {
                                     .copyWith(color: Colors.white)),
                           ),
                         ],
-                      ),
-                    ],
+                      );
+
+                      // Wide: single row with title left, actions right ─────────
+                      if (isWide) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(child: titleRow),
+                            const SizedBox(width: AppSpacing.md),
+                            actionButtons,
+                          ],
+                        );
+                      }
+
+                      // Narrow: stacked column ──────────────────────────────────
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          titleRow,
+                          const SizedBox(height: AppSpacing.md),
+                          actionButtons,
+                        ],
+                      );
+                    },
                   ),
                   const SizedBox(height: AppSpacing.xxl),
 

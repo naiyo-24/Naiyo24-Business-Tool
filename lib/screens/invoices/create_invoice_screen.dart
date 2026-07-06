@@ -576,7 +576,7 @@ class _CreateInvoiceScreenState
           onPressed: _isSaving ? null : _saveInvoice,
           style: FilledButton.styleFrom(
             backgroundColor: AppColors.primary,
-            minimumSize: const Size(double.infinity, 52),
+            minimumSize: const Size(0, 52),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(AppBorderRadius.md),
             ),
@@ -601,7 +601,7 @@ class _CreateInvoiceScreenState
           onPressed: _isSaving ? null : _saveAndSendInvoice,
           style: FilledButton.styleFrom(
             backgroundColor: AppColors.primary,
-            minimumSize: const Size(double.infinity, 52),
+            minimumSize: const Size(0, 52),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(AppBorderRadius.md),
             ),
@@ -625,7 +625,7 @@ class _CreateInvoiceScreenState
         OutlinedButton(
           onPressed: () => context.pop(),
           style: OutlinedButton.styleFrom(
-            minimumSize: const Size(double.infinity, 48),
+            minimumSize: const Size(0, 48),
             side: const BorderSide(color: AppColors.border),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(AppBorderRadius.md),

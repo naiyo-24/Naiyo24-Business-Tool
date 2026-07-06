@@ -127,13 +127,10 @@ class _ClientsScreenState extends ConsumerState<ClientsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // ── Page Header ────────────────────────────────────────────
-                  Wrap(
-                    alignment: WrapAlignment.spaceBetween,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: AppSpacing.md,
-                    runSpacing: AppSpacing.md,
-                    children: [
-                      Row(
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final isWide = constraints.maxWidth >= 600;
+                      final titleRow = Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           InkWell(
@@ -157,8 +154,8 @@ class _ClientsScreenState extends ConsumerState<ClientsScreen> {
                             child: Text('Clients', style: AppTextStyles.h1),
                           ),
                         ],
-                      ),
-                      Row(
+                      );
+                      final actionButtons = Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           OutlinedButton.icon(
@@ -200,8 +197,26 @@ class _ClientsScreenState extends ConsumerState<ClientsScreen> {
                                     .copyWith(color: Colors.white)),
                           ),
                         ],
-                      ),
-                    ],
+                      );
+                      if (isWide) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(child: titleRow),
+                            const SizedBox(width: AppSpacing.md),
+                            actionButtons,
+                          ],
+                        );
+                      }
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          titleRow,
+                          const SizedBox(height: AppSpacing.md),
+                          actionButtons,
+                        ],
+                      );
+                    },
                   ),
                   const SizedBox(height: AppSpacing.lg),
 

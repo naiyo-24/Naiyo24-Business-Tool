@@ -191,21 +191,18 @@ class _CreatePurchaseOrderScreenState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // ── Page Header ─────────────────────────────────────────────
-                  Wrap(
-                    alignment: WrapAlignment.spaceBetween,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: AppSpacing.md,
-                    runSpacing: AppSpacing.md,
-                    children: [
-                      Column(
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final isWide = constraints.maxWidth >= 600;
+                      final titleBlock = Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('Create Purchase Order', style: AppTextStyles.h1),
                           const SizedBox(height: 4),
                           Text('Fill in the details below to create a new PO.', style: AppTextStyles.bodyMedium),
                         ],
-                      ),
-                      Row(
+                      );
+                      final actionButtons = Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           OutlinedButton(
@@ -234,8 +231,26 @@ class _CreatePurchaseOrderScreenState
                             ),
                           ),
                         ],
-                      ),
-                    ],
+                      );
+                      if (isWide) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(child: titleBlock),
+                            const SizedBox(width: AppSpacing.md),
+                            actionButtons,
+                          ],
+                        );
+                      }
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          titleBlock,
+                          const SizedBox(height: AppSpacing.md),
+                          actionButtons,
+                        ],
+                      );
+                    },
                   ),
                   const SizedBox(height: AppSpacing.md),
 

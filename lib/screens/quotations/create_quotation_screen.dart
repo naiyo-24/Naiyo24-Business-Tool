@@ -833,7 +833,7 @@ class _CreateQuotationScreenState
           onPressed: _isSaving ? null : () => _saveQuotation(showSendDialog: false),
           style: FilledButton.styleFrom(
             backgroundColor: AppColors.primary,
-            minimumSize: const Size(double.infinity, 48),
+            minimumSize: const Size(0, 48),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(AppBorderRadius.md),
             ),
@@ -848,7 +848,7 @@ class _CreateQuotationScreenState
         OutlinedButton(
           onPressed: _isSaving ? null : () => _saveQuotation(showSendDialog: true),
           style: OutlinedButton.styleFrom(
-            minimumSize: const Size(double.infinity, 48),
+            minimumSize: const Size(0, 48),
             side: const BorderSide(color: AppColors.border),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(AppBorderRadius.md),
@@ -860,7 +860,7 @@ class _CreateQuotationScreenState
         OutlinedButton(
           onPressed: () => context.pop(),
           style: OutlinedButton.styleFrom(
-            minimumSize: const Size(double.infinity, 48),
+            minimumSize: const Size(0, 48),
             side: BorderSide.none,
           ),
           child: Text('Cancel', style: AppTextStyles.labelLarge.copyWith(color: AppColors.textSecondary)),

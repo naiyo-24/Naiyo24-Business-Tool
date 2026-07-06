@@ -111,13 +111,10 @@ class _PurchaseOrdersScreenState extends ConsumerState<PurchaseOrdersScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Header
-                  Wrap(
-                    alignment: WrapAlignment.spaceBetween,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: AppSpacing.md,
-                    runSpacing: AppSpacing.md,
-                    children: [
-                      Row(
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final isWide = constraints.maxWidth >= 600;
+                      final titleRow = Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           InkWell(
@@ -148,8 +145,8 @@ class _PurchaseOrdersScreenState extends ConsumerState<PurchaseOrdersScreen> {
                             ),
                           ),
                         ],
-                      ),
-                      Row(
+                      );
+                      final actionButtons = Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           OutlinedButton.icon(
@@ -190,8 +187,26 @@ class _PurchaseOrdersScreenState extends ConsumerState<PurchaseOrdersScreen> {
                             ),
                           ),
                         ],
-                      ),
-                    ],
+                      );
+                      if (isWide) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(child: titleRow),
+                            const SizedBox(width: AppSpacing.md),
+                            actionButtons,
+                          ],
+                        );
+                      }
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          titleRow,
+                          const SizedBox(height: AppSpacing.md),
+                          actionButtons,
+                        ],
+                      );
+                    },
                   ),
                   const SizedBox(height: AppSpacing.xl),
 

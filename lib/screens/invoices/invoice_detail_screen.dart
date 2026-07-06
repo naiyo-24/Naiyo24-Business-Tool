@@ -157,16 +157,12 @@ class _HeaderBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Wrap(
-      alignment: WrapAlignment.spaceBetween,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      spacing: AppSpacing.md,
-      runSpacing: AppSpacing.md,
-      children: [
-        Row(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isWide = constraints.maxWidth >= 600;
+        final titleRow = Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Back
             InkWell(
               onTap: () {
                 if (context.canPop()) {
@@ -202,11 +198,10 @@ class _HeaderBar extends ConsumerWidget {
               ),
             ),
           ],
-        ),
-        Row(
+        );
+        final actionButtons = Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Record Payment button
             if (invoice.status != InvoiceStatus.paid) ...[
               FilledButton.icon(
                 onPressed: () => _showRecordPayment(context, ref),
@@ -226,7 +221,6 @@ class _HeaderBar extends ConsumerWidget {
               ),
               const SizedBox(width: AppSpacing.sm),
             ],
-            // Return Items
             OutlinedButton.icon(
               onPressed: () => context.push(AppRoutes.returnItemsPath(invoice.id)),
               style: OutlinedButton.styleFrom(
@@ -244,7 +238,6 @@ class _HeaderBar extends ConsumerWidget {
                       .copyWith(color: AppColors.warning)),
             ),
             const SizedBox(width: AppSpacing.sm),
-            // Delete
             OutlinedButton.icon(
               onPressed: () => _confirmDelete(context, ref),
               style: OutlinedButton.styleFrom(
@@ -262,8 +255,26 @@ class _HeaderBar extends ConsumerWidget {
                       .copyWith(color: AppColors.error)),
             ),
           ],
-        ),
-      ],
+        );
+        if (isWide) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(child: titleRow),
+              const SizedBox(width: AppSpacing.md),
+              actionButtons,
+            ],
+          );
+        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            titleRow,
+            const SizedBox(height: AppSpacing.md),
+            actionButtons,
+          ],
+        );
+      },
     );
   }
 
